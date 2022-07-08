@@ -1,0 +1,4 @@
+{
+  "mongoURL": "mongodb://localhost/My-Zone",
+  "jwtPrivateKey": "1103"
+}
