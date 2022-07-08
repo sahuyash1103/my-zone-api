@@ -33,12 +33,11 @@ let mongoURL = config.get("mongoURL");
 if (mongoURL.slice(-1) === "/") {
   mongoURL = mongoURL.slice(0, -1);
 }
-console.log(mongoURL);
 
 mongoose
   .connect(mongoURL)
   .then(() => console.log("Connected to mongoDB..."))
-  .catch(() => console.error("Error while connecting to mongoDB"));
+  .catch((err) => console.error("Error while connecting to mongoDB: " + err));
 
 // -----------------------------------MIDDLEWARES
 app.use(express.json());
@@ -72,3 +71,6 @@ app.get("/api/about-me", auth, async (req, res) => {
 app.listen(3001, () =>
   console.log(`server is listning at http://localhost:3001/api`)
 );
+
+// ------------------------------------------Export the Express API
+module.exports = app;
