@@ -16,8 +16,8 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
-if (!config.get("jwtPrivateKey")) {
-  console.error("FATAL ERROR: jwtPrivate key is not defined.");
+if (!config.get("mongoURL")) {
+  console.error("FATAL ERROR: mongo url is not defined.");
   process.exit(1);
 }
 
