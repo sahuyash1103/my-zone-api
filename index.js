@@ -16,6 +16,11 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivate key is not defined.");
+  process.exit(1);
+}
+
 // -----------------------------------IMPORT ROUTES
 const banners = require("./routes/banner");
 const login = require("./routes/login");
@@ -24,7 +29,12 @@ const product = require("./routes/product");
 const order = require("./routes/order");
 
 //------------------------------------DB CONNECTION
-const mongoURL = config.get("mongoURL");
+let mongoURL = config.get("mongoURL");
+if (mongoURL.slice(-1) === "/") {
+  mongoURL = mongoURL.slice(0, -1);
+}
+console.log(mongoURL);
+
 mongoose
   .connect(mongoURL)
   .then(() => console.log("Connected to mongoDB..."))

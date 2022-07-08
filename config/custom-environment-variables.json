@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": "myZoneJWTPrivateKey"
+  "mongoURL": "myZone-mongoURL",
+  "jwtPrivateKey": "myZone-jwtPrivateKey"
 }
