@@ -21,6 +21,8 @@ if (!config.get("mongoURL")) {
   process.exit(1);
 }
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
+
 // -----------------------------------IMPORT ROUTES
 const banners = require("./routes/banner");
 const login = require("./routes/login");
@@ -71,6 +73,3 @@ app.get("/api/about-me", auth, async (req, res) => {
 app.listen(3001, () =>
   console.log(`server is listning at http://localhost:3001/api`)
 );
-
-// ------------------------------------------Export the Express API
-module.exports = app;
