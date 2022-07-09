@@ -21,8 +21,6 @@ if (!config.get("mongoURL")) {
   process.exit(1);
 }
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
-
 // -----------------------------------IMPORT ROUTES
 const banners = require("./routes/banner");
 const login = require("./routes/login");
