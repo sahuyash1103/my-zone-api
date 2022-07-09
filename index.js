@@ -68,6 +68,6 @@ app.get("/api/about-me", auth, async (req, res) => {
 });
 
 // ---------------------------------------LISTNING TO CLIENTS
-app.listen(3001, () =>
-  console.log(`server is listning at http://localhost:3001/api`)
+app.listen(process.env.PORT || 3001, () =>
+  console.log(`server is listning....`)
 );
