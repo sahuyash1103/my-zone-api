@@ -1,14 +1,22 @@
 // --------------------------------------IMPORTS
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const config = require("config");
 
 const auth = require("./middlewares/auth");
+const header = require("./middlewares/setHeader");
 const { User } = require("./utils/mongoDB_Schemas");
 
+//---------------------------------------CORS OPTIONS
+const corsOptions = {
+  // origin: '*'
+};
+
 const app = express();
+app.use(cors(corsOptions));
 
 //-----------------------------------CHECKING ENV VARIABLES
 if (!config.get("jwtPrivateKey")) {
@@ -47,8 +55,10 @@ app.use(helmet());
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.log("morgan is enabled");
+  console.info("morgan is enabled");
 }
+
+app.use(header);
 
 // ---------------------------------------EXPORTED ROUTES
 app.use("/api/banners", banners);
