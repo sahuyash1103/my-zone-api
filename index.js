@@ -11,9 +11,7 @@ const header = require("./middlewares/setHeader");
 const { User } = require("./utils/mongoDB_Schemas");
 
 //---------------------------------------CORS OPTIONS
-const corsOptions = {
-  // origin: '*'
-};
+const corsOptions = {};
 
 const app = express();
 app.use(cors(corsOptions));

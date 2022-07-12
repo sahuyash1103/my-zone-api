@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User is already registered.");
 
-  user = User(_.pick(req.body, ["name", "email", "password"]));
+  user = User(_.pick(req.body, ["username", "email", "password"]));
 
   const salt = await bcrypt.genSalt(10);
 
@@ -22,12 +22,12 @@ router.post("/", async (req, res) => {
   await user.save();
 
   const token = user.genrateAuthToken();
-  res.header("x-auth-token", token).send(_.pick(user, ["name", "email"]));
+  res.header("x-auth-token", token).send(_.pick(user, ["username", "email"]));
 });
 
 async function validateUser(user) {
   const schema = joi.object({
-    name: joi.string().min(5).max(25).required(),
+    username: joi.string().min(5).max(25).required(),
     email: joi.string().min(5).max(255).required().email(),
     password: joi.string().min(8).max(255).required(),
   });
