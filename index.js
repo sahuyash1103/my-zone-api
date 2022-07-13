@@ -6,9 +6,24 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const config = require("config");
 
+const logger = require("./logger/logger");
+
 const auth = require("./middlewares/auth");
 const header = require("./middlewares/setHeader");
 const { User } = require("./utils/mongoDB_Schemas");
+
+// -----------------------------------IMPORT ROUTES
+const banners = require("./routes/banner");
+const login = require("./routes/login");
+const signup = require("./routes/signup");
+const product = require("./routes/product");
+const order = require("./routes/order");
+
+//--------------------------------------------------LOGS
+logger.error("ERROR");
+logger.info("INFO");
+logger.debug("DEBUG");
+logger.secret("SECRET");
 
 //---------------------------------------CORS OPTIONS
 const corsOptions = {};
@@ -18,21 +33,14 @@ app.use(cors(corsOptions));
 
 //-----------------------------------CHECKING ENV VARIABLES
 if (!config.get("jwtPrivateKey")) {
-  console.error("FATAL ERROR: jwtPrivate key is not defined.");
+  logger.error("FATAL ERROR: jwtPrivate key is not defined.");
   process.exit(1);
 }
 
 if (!config.get("mongoURL")) {
-  console.error("FATAL ERROR: mongo url is not defined.");
+  logger.error("FATAL ERROR: mongo url is not defined.");
   process.exit(1);
 }
-
-// -----------------------------------IMPORT ROUTES
-const banners = require("./routes/banner");
-const login = require("./routes/login");
-const signup = require("./routes/signup");
-const product = require("./routes/product");
-const order = require("./routes/order");
 
 //------------------------------------DB CONNECTION
 let mongoURL = config.get("mongoURL");
@@ -42,8 +50,8 @@ if (mongoURL.slice(-1) === "/") {
 
 mongoose
   .connect(mongoURL)
-  .then(() => console.log("Connected to mongoDB..."))
-  .catch((err) => console.error("Error while connecting to mongoDB: " + err));
+  .then(() => logger.info("Connected to mongoDB..."))
+  .catch((err) => logger.error(`Error while connecting to mongoDB: ${err}`));
 
 // -----------------------------------MIDDLEWARES
 app.use(express.json());
@@ -53,7 +61,7 @@ app.use(helmet());
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.info("morgan is enabled");
+  logger.info("morgan is enabled");
 }
 
 app.use(header);
@@ -77,5 +85,5 @@ app.get("/api/about-me", auth, async (req, res) => {
 
 // ---------------------------------------LISTNING TO CLIENTS
 app.listen(process.env.PORT || 3001, () =>
-  console.log(`server is listning....`)
+  logger.info(`server is listning....`)
 );

@@ -1,9 +1,8 @@
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
-const joi = require("joi");
 const express = require("express");
+const joi = require("joi");
+const bcrypt = require("bcrypt");
 const { User } = require("../utils/mongoDB_Schemas");
-const { string } = require("joi");
+const _ = require("lodash");
 
 const router = express.Router();
 

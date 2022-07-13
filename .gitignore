@@ -1,3 +1,6 @@
 node_modules/
 data sampl.json
 db sample.json
+
+combined.log
+error.log

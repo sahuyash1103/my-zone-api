@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const joi = require("joi");
 const express = require("express");
+const joi = require("joi");
+const bcrypt = require("bcrypt");
 const { User } = require("../utils/mongoDB_Schemas");
 
 const router = express.Router();
@@ -13,11 +13,10 @@ router.post("/", async (req, res) => {
   if (!user) return res.status(400).send("Invalid email or password.");
 
   const isValidPass = await bcrypt.compare(req.body.password, user.password);
-  if (!isValidPass)
-    return res.status(400).send("Invalid email or password.");
+  if (!isValidPass) return res.status(400).send("Invalid email or password.");
 
   const token = user.genrateAuthToken();
-  res.send({token});
+  res.send({ token });
 });
 
 async function authenticateUser(user) {
