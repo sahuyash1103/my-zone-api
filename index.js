@@ -19,12 +19,6 @@ const signup = require("./routes/signup");
 const product = require("./routes/product");
 const order = require("./routes/order");
 
-//--------------------------------------------------LOGS
-logger.error("ERROR");
-logger.info("INFO");
-logger.debug("DEBUG");
-logger.secret("SECRET");
-
 //---------------------------------------CORS OPTIONS
 const corsOptions = {};
 
@@ -59,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(helmet());
 
-if (app.get("env") === "development") {
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("tiny"));
   logger.info("morgan is enabled");
 }

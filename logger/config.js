@@ -33,14 +33,16 @@ const customFormat = printf(({ level, message, label, timestamp }) => {
 });
 
 const customTransports = [
-  new transports.Console({
-    format: combine(
-      colorize(),
-      label({ label: "Dev" }),
-      timestamp({ format: "HH:MM:SS" }),
-      customFormat
-    ),
-  }),
+  process.env.NODE_ENV === "production"
+    ? new transports.Console()
+    : new transports.Console({
+        format: combine(
+          colorize(),
+          label({ label: "Dev" }),
+          timestamp({ format: "HH:MM:SS" }),
+          customFormat
+        ),
+      }),
   new transports.File({ filename: "error.log", level: "error" }),
   new transports.File({ filename: "combined.log" }),
 ];
