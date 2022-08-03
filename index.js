@@ -18,6 +18,7 @@ const login = require("./routes/login");
 const signup = require("./routes/signup");
 const product = require("./routes/product");
 const order = require("./routes/order");
+const user = require("./routes/user");
 
 //---------------------------------------CORS OPTIONS
 const corsOptions = {};
@@ -66,6 +67,7 @@ app.use("/api/login", login);
 app.use("/api/signup", signup);
 app.use("/api/products", product);
 app.use("/api/orders", order);
+app.use("/api/user", user);
 
 // ---------------------------------------HOME ROUTE
 app.get("/api", (req, res) => {

@@ -1,9 +1,11 @@
-let express = require("express");
+const express = require("express");
+const { Banner } = require("../utils/mongoDB_Schemas");
 
 router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("banners list");
+router.get("/", async (req, res) => {
+  const banners = await Banner.find();
+  res.send(banners);
 });
 
 module.exports = router;
