@@ -16,7 +16,10 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true, minlength: 5, maxlength: 1024 },
   address: { type: String, minlength: 5, maxlength: 1024 },
   orders: [mongoose.Types.ObjectId],
-  cart: [mongoose.Types.ObjectId],
+  cart: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Product'
+  },
 });
 
 const productSchema = mongoose.Schema({

@@ -75,7 +75,9 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/api/about-me", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select(["-password", "-__v"]);
+  const user = await User.findById(req.user._id)
+    .select(["-password", "-__v"])
+    .populate("cart");
   res.send(user);
 });
 
