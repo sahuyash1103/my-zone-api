@@ -4,9 +4,16 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const config = require("config");
+
+require("dotenv").config();
 
 const logger = require("./logger/logger");
+const {
+  mongoURL,
+  jwtPrivateKey,
+  node_env,
+  port,
+} = require("./utils/env_config");
 
 const auth = require("./middlewares/auth");
 const header = require("./middlewares/setHeader");
@@ -19,6 +26,7 @@ const signup = require("./routes/signup");
 const product = require("./routes/product");
 const order = require("./routes/order");
 const user = require("./routes/user");
+const buy = require("./routes/buy");
 
 //---------------------------------------CORS OPTIONS
 const corsOptions = {};
@@ -27,22 +35,17 @@ const app = express();
 app.use(cors(corsOptions));
 
 //-----------------------------------CHECKING ENV VARIABLES
-if (!config.get("jwtPrivateKey")) {
+if (!jwtPrivateKey) {
   logger.error("FATAL ERROR: jwtPrivate key is not defined.");
   process.exit(1);
 }
 
-if (!config.get("mongoURL")) {
+if (!mongoURL) {
   logger.error("FATAL ERROR: mongo url is not defined.");
   process.exit(1);
 }
 
 //------------------------------------DB CONNECTION
-let mongoURL = config.get("mongoURL");
-if (mongoURL.slice(-1) === "/") {
-  mongoURL = mongoURL.slice(0, -1);
-}
-
 mongoose
   .connect(mongoURL)
   .then(() => logger.info("Connected to mongoDB..."))
@@ -54,7 +57,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(helmet());
 
-if (process.env.NODE_ENV === "development") {
+if (node_env === "development") {
   app.use(morgan("tiny"));
   logger.info("morgan is enabled");
 }
@@ -68,6 +71,7 @@ app.use("/api/signup", signup);
 app.use("/api/products", product);
 app.use("/api/orders", order);
 app.use("/api/user", user);
+app.use("/api/buy", buy);
 
 // ---------------------------------------HOME ROUTE
 app.get("/api", (req, res) => {
@@ -76,12 +80,12 @@ app.get("/api", (req, res) => {
 
 app.get("/api/about-me", auth, async (req, res) => {
   const user = await User.findById(req.user._id)
-    .select(["-password", "-__v"])
+    .select(["-password", "-__v", "-orders"])
     .populate("cart");
+  if (!user) return res.status(400).send("invalid token");
+
   res.send(user);
 });
 
 // ---------------------------------------LISTNING TO CLIENTS
-app.listen(process.env.PORT || 3001, () =>
-  logger.info(`server is listning....`)
-);
+app.listen(port || 3001, () => logger.info(`server is listning....`));

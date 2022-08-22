@@ -27,7 +27,6 @@ router.patch("/add-to-cart", auth, async (req, res) => {
 });
 
 router.patch("/remove-from-cart", auth, async (req, res) => {
-  console.log(req.body);
   const error = await validateCart(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -35,6 +34,15 @@ router.patch("/remove-from-cart", auth, async (req, res) => {
   if (!user) return res.status(400).send("invalid token");
 
   user.cart.pop(req.body.product_id);
+  user.save();
+  res.send({ cart: user.cart.length });
+});
+
+router.patch("/empty-cart", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select(["-password", "-__v"]);
+  if (!user) return res.status(400).send("invalid token");
+
+  user.cart = [];
   user.save();
   res.send({ cart: user.cart.length });
 });

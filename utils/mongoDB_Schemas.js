@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const { string } = require("joi");
 
 //--------------------------------------------SCHEMAS
+const orderSchema = mongoose.Schema({
+  products: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Product",
+    required: true,
+  },
+  total: { type: String, required: true },
+});
+
 const userSchema = mongoose.Schema({
   username: { type: String, required: true, minlength: 5, maxlength: 25 },
   email: {
@@ -15,10 +23,10 @@ const userSchema = mongoose.Schema({
   },
   password: { type: String, required: true, minlength: 5, maxlength: 1024 },
   address: { type: String, minlength: 5, maxlength: 1024 },
-  orders: [mongoose.Types.ObjectId],
+  orders: [orderSchema],
   cart: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Product'
+    ref: "Product",
   },
 });
 

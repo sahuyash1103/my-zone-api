@@ -4,3 +4,7 @@ db sample.json
 
 combined.log
 error.log
+
+.env
+.env.development
+.env.production
