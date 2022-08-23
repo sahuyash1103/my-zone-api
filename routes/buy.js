@@ -17,10 +17,10 @@ router.post("/", auth, async (req, res) => {
   res.send({ orders: user.orders });
 });
 
-router.get("/product/:id", async (req, res) => {
-  const { product, token } = req.body;
-});
+// TODO: payment gatway goes here
+router.get("/product/:id", async (req, res) => {});
 
+//an here
 router.post("/payment", auth, async (req, res) => {});
 
 module.exports = router;

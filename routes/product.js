@@ -9,8 +9,14 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/product/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id); //await Product.findById();
-  res.send(product);
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(400).send("can't find the product");
+
+    res.send(product);
+  } catch (error) {
+    res.status(400).send("invalid product id.")
+  }
 });
 
 module.exports = router;
